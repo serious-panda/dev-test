@@ -42,7 +42,10 @@ public class RestLocationLoader implements LocationLoader {
                 try {
                     ret = mapper.readValue(s,aClass);
                 } catch (IOException e) {
-                    System.err.println("JSON Parsing error: " + e.getMessage());
+                    //System.err.println("JSON Parsing error: " + e.getMessage());
+                    // do nothing.
+                    // this exception is a good candidate for log message, but
+                    // since there is no logging it will be suppressed.
                 }
                 return ret;
             }
@@ -90,6 +93,9 @@ public class RestLocationLoader implements LocationLoader {
 
         } catch (UnirestException e) {
             System.err.println("Unable to retrieve location data: " + e.getMessage());
+        } catch (RuntimeException e){
+            // thrown by Unirest on invalid location parameter
+            System.err.println("Invalid location name provided. Cannot make an API query.");
         }
         return locations;
     }

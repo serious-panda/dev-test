@@ -3,10 +3,10 @@ package com.dima.devtest.goeuro.service;
 import com.dima.devtest.goeuro.api.LocationsRepository;
 import com.dima.devtest.goeuro.model.LocationDetails;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -29,7 +29,8 @@ public class FilesystemLocationsRepository implements LocationsRepository {
         if (locationName == null || locationName.isEmpty() || details == null){
             return Optional.empty();
         }
-        Path path = getPathForLocation(locationName);
+        Path path = getPathForLocation(locationName).orElseThrow(
+                ()->new IOException("Invalid location name provided. Cannot save data."));
         Files.deleteIfExists(path); // to prevent appending the same data.
 
         // UTF-8 encoding by default
@@ -54,7 +55,12 @@ public class FilesystemLocationsRepository implements LocationsRepository {
         return Optional.of(path);
     }
 
-    private Path getPathForLocation(String locationName){
-        return Paths.get(locationName + ".csv");
+    private Optional<Path> getPathForLocation(String locationName){
+        try {
+            return Optional.of(Paths.get(locationName + ".csv"));
+        } catch (InvalidPathException e){
+            return Optional.empty();
+        }
+
     }
 }
