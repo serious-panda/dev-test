@@ -62,7 +62,7 @@ public class RestLocationLoader implements LocationLoader {
         });
 
         Unirest.clearDefaultHeaders();
-        Unirest.setProxy(HttpHost.create("http://10.184.220.176:911"));
+        //Unirest.setProxy(HttpHost.create("http://10.184.220.176:911"));
     }
 
     private void shutdown(){
