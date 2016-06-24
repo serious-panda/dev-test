@@ -22,8 +22,8 @@ public class RestLocationLoaderTest extends TestCase {
 
         Optional<LocationDetails[]> result = loader.load(name);
         String expected = name.toLowerCase();
-        assertTrue(result.isPresent());
-        assertTrue(Arrays.stream(result.get())
+        assertTrue("Result object expected.", result.isPresent());
+        assertTrue("Unexpected location name in result.", Arrays.stream(result.get())
                     .allMatch(x->x.name.toLowerCase().contains(expected)));
     }
 
